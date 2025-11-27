@@ -1,20 +1,23 @@
 ﻿<!DOCTYPE html>
-<html lang="en">
+<html lang="ru">
 
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <base href="/" />
     <link rel="stylesheet" href="bootstrap/bootstrap.min.css" />
-    <link rel="stylesheet" href="app.css" />
+    <link rel="stylesheet" href="~/css/app.css" />
+    <link rel="stylesheet" href="~/css/output.css" />
     <link rel="stylesheet" href="360AI_BlazorApp.styles.css" />
     <link rel="icon" type="image/png" href="favicon.png" />
     <HeadOutlet />
 </head>
 
-<body>
+<body class="max-[1000px]:px-4 px-[200px] font-Roboto flex flex-col min-h-screen bg-layoutbg bg-[url('../images/back.svg')] max-[1020px]:bg-[url('../images/back2.svg')] bg-contain bg-no-repeat">
+
     <Routes @rendermode="InteractiveServer" />
     <script src="_framework/blazor.web.js"></script>
+    <script src="~/js/main.js"></script>
 </body>
 
 </html>

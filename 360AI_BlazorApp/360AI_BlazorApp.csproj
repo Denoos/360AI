@@ -9,11 +9,25 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Folder Include="wwwroot\js\" />
+    <Content Remove="wwwroot\fonts\RobotoFlex-VariableFont_GRAD,XOPQ,XTRA,YOPQ,YTAS,YTDE,YTFI,YTLC,YTUC,opsz,slnt,wdth,wght.ttf" />
+    <Content Remove="wwwroot\images\back.png" />
+    <Content Remove="wwwroot\images\back.svg" />
+    <Content Remove="wwwroot\images\back2.svg" />
+    <Content Remove="wwwroot\images\Лого.svg" />
   </ItemGroup>
 
   <ItemGroup>
     <PackageReference Include="Blazor.SpeechRecognition" Version="9.0.1" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Resource Include="wwwroot\css\app.css" />
+    <Resource Include="wwwroot\css\output.css" />
+    <Resource Include="wwwroot\fonts\RobotoFlex-VariableFont_GRAD,XOPQ,XTRA,YOPQ,YTAS,YTDE,YTFI,YTLC,YTUC,opsz,slnt,wdth,wght.ttf" />
+    <Resource Include="wwwroot\images\back.png" />
+    <Resource Include="wwwroot\images\back.svg" />
+    <Resource Include="wwwroot\images\back2.svg" />
+    <Resource Include="wwwroot\images\Лого.svg" />
   </ItemGroup>
 
 </Project>

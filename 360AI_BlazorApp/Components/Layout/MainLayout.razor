@@ -1,88 +1,15 @@
 ﻿@inherits LayoutComponentBase
-@using _360AI_BlazorApp.Components.Services
-@inject ISpeechRecognitionService SpeechRecognitionService
-@inject VoiceNavigationService VoiceNavigation
-@implements IAsyncDisposable
 
-<div class="page">
-    <main>
-        <div class="top-row px-4">
-            <button class="btn btn-outline-primary ms-3" @onclick="ToggleMicrophone">
-                @if (isMicrophoneActive)
-                {
-                    <text>🚫 Stop</text>
-                }
-                else
-                {
-                    <text>🎤 Start</text>
-                }
-            </button>
-        </div>
+<header class="text-white max-[1000px]:pt-7 pt-[42px]">
+    <!-- Header -->
+    <HeaderLayout />
+</header>
 
-        <article class="content px-4">
-            @Body
-        </article>
-    </main>
-</div>
+<!-- Основной контент -->
+<main class="">
+    @Body
+    <!-- Блок выдачи -->
+</main>
 
-<div id="blazor-error-ui" data-nosnippet>
-    An unhandled error has occurred.
-    <a href="." class="reload">Reload</a>
-    <span class="dismiss">🗙</span>
-</div>
-
-
-@code {
-    private bool isMicrophoneActive = false;
-    private IDisposable? speechRecognitionSubscription;
-
-    private async Task ToggleMicrophone()
-    {
-        if (isMicrophoneActive)
-        {
-            await SpeechRecognitionService.CancelSpeechRecognitionAsync(false);
-            speechRecognitionSubscription?.Dispose();
-            speechRecognitionSubscription = null;
-            isMicrophoneActive = false;
-        }
-        else
-        {
-            speechRecognitionSubscription = await SpeechRecognitionService.RecognizeSpeechAsync(
-                "ru-RU",
-
-                onRecognized: async (text) =>
-                {
-                    VoiceNavigation.RecognizeSpeech(text);
-                    await InvokeAsync(StateHasChanged);
-                },
-                onError: async (error) =>
-                {
-                    Console.WriteLine($"Speech recognition error: {error}");
-                    await InvokeAsync(StateHasChanged);
-                },
-                onStarted: async () =>
-                {
-                    Console.WriteLine("Speech recognition started");
-                    await InvokeAsync(StateHasChanged);
-                },
-                onEnded: async () =>
-                {
-                    Console.WriteLine("Speech recognition ended");
-                    isMicrophoneActive = false;
-                    await InvokeAsync(StateHasChanged);
-                }
-            );
-            isMicrophoneActive = true;
-        }
-        StateHasChanged();
-    }
-
-    public async ValueTask DisposeAsync()
-    {
-        if (speechRecognitionSubscription is not null)
-        {
-            speechRecognitionSubscription.Dispose();
-            await SpeechRecognitionService.CancelSpeechRecognitionAsync(false);
-        }
-    }
-}
+<!-- Footer -->
+<div><FooterLayout /></div>

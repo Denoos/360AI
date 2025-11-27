@@ -1,0 +1,90 @@
+﻿@inherits LayoutComponentBase
+@using _360AI_BlazorApp.Components.Services
+@inject ISpeechRecognitionService SpeechRecognitionService
+@inject VoiceSearchService VoiceSearch
+@implements IAsyncDisposable
+
+
+@page "/old"
+
+<PageTitle>Home</PageTitle>
+<div class="page">
+    <main>
+        <div class="top-row px-4">
+            <button class="btn btn-outline-primary ms-3" @onclick="ToggleMicrophone">
+                @if (isMicrophoneActive)
+                {
+                    <text>🚫 Stop</text>
+                }
+                else
+                {
+                    <text>🎤 Start</text>
+                }
+            </button>
+
+            <p>@searchResult</p>
+        </div>
+
+        <article class="content px-4">
+        </article>
+    </main>
+</div>
+
+
+
+@code {
+    private bool isMicrophoneActive = false;
+    private IDisposable? speechRecognitionSubscription;
+    private string searchResult;
+
+    private async Task ToggleMicrophone()
+    {
+        if (isMicrophoneActive)
+        {
+            await SpeechRecognitionService.CancelSpeechRecognitionAsync(false);
+            speechRecognitionSubscription?.Dispose();
+            speechRecognitionSubscription = null;
+            isMicrophoneActive = false;
+        }
+        else
+        {
+            speechRecognitionSubscription = await SpeechRecognitionService.RecognizeSpeechAsync(
+                "ru-RU",
+
+                onRecognized: async (text) =>
+                {
+                    VoiceSearch.RecognizeSpeech(text);
+                    await InvokeAsync(StateHasChanged);
+                    searchResult = VoiceSearch.HandleSearch();
+                },
+                onError: async (error) =>
+                {
+                    Console.WriteLine($"Speech recognition error: {error}");
+                    await InvokeAsync(StateHasChanged);
+                },
+                onStarted: async () =>
+                {
+                    Console.WriteLine("Speech recognition started");
+                    await InvokeAsync(StateHasChanged);
+                },
+                onEnded: async () =>
+                {
+                    Console.WriteLine("Speech recognition ended");
+                    isMicrophoneActive = false;
+                    await InvokeAsync(StateHasChanged);
+                }
+            );
+            isMicrophoneActive = true;
+        }
+        StateHasChanged();
+    }
+
+    public async ValueTask DisposeAsync()
+    {
+        if (speechRecognitionSubscription is not null)
+        {
+            speechRecognitionSubscription.Dispose();
+            await SpeechRecognitionService.CancelSpeechRecognitionAsync(false);
+        }
+    }
+}
