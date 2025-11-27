@@ -9,6 +9,10 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Folder Include="wwwroot\js\" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="Blazor.SpeechRecognition" Version="9.0.1" />
   </ItemGroup>
 
