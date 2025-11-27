@@ -1,1 +1,68 @@
 @import "tailwindcss";
+
+@theme {
+    --font-Roboto: "Roboto Flex";
+    --color-grayText: #626B70;
+    --color-greenText: #29F29C;
+    --color-greenBlock: #2FEE89;
+    --color-blackText: #2B2B2B;
+    --color-focus-blue: #1F78ED;
+    --color-layoutbg: #242326;
+
+    /* Градиенты */
+    --color-gradient-1: linear-gradient(to right, #B9925A, #D9BA83);
+    --gradient-1: linear-gradient(to right, #B9925A, #D9BA83);
+    --gradient-1-top: linear-gradient(to top, #B9925A, #D9BA83);
+    --gradient-2: linear-gradient(to right, #B9925A, #D9BA83, #B9925A);
+
+    --gradient-custom: linear-gradient(to right, #7A7A7AED, #FFFFFF00);
+}
+
+@layer utilities {
+    .bg-gradient-1 {
+        background-image: var(--gradient-1);
+    }
+
+    .bg-gradient-1-top {
+        background-image: var(--gradient-1-top);
+    }
+
+    .gradient-text {
+        background-image: linear-gradient(to right, #2E6EDE, #FFFFFF);
+        -webkit-background-clip: text;
+        background-clip: text;
+        color: transparent;
+    }
+
+    .gradient-text1 {
+        background-image: linear-gradient(to top, #95ABCC, #CAD3E1);
+        -webkit-background-clip: text;
+        background-clip: text;
+        color: transparent;
+    }
+}
+
+/*@font-face {
+    font-family: "SuisseIntl-Regular";
+    src: url("https://db.onlinewebfonts.com/t/88f10bf18a36407ef36bf30bc25a3618.eot");
+    src: url("https://db.onlinewebfonts.com/t/88f10bf18a36407ef36bf30bc25a3618.eot?#iefix")format("embedded-opentype"),
+    url("https://db.onlinewebfonts.com/t/88f10bf18a36407ef36bf30bc25a3618.woff2")format("woff2"),
+    url("https://db.onlinewebfonts.com/t/88f10bf18a36407ef36bf30bc25a3618.woff")format("woff"),
+    url("https://db.onlinewebfonts.com/t/88f10bf18a36407ef36bf30bc25a3618.ttf")format("truetype"),
+    url("https://db.onlinewebfonts.com/t/88f10bf18a36407ef36bf30bc25a3618.svg#SuisseIntl-Regular")format("svg");
+}*/
+@font-face {
+    font-family: 'Roboto Flex';
+    src: url('../fonts/RobotoFlex-VariableFont_GRAD,XOPQ,XTRA,YOPQ,YTAS,YTDE,YTFI,YTLC,YTUC,opsz,slnt,wdth,wght.ttf') format('truetype');
+}
+
+/*.price-new {
+    @apply text-[#8C959C] line-through text-sm leading-none
+}*/
+
+a {
+    @apply cursor-pointer
+}
+button {
+    @apply cursor-pointer outline-[#FFFFFF29] focus:ring-0
+}

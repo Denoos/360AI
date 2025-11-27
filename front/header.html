@@ -1,10 +1,72 @@
-<header class="bg-blue-600 text-white py-4 px-[300px]">
-<div class="flex justify-between">
-    <div>360AI</div>
-    <div class="flex space-x-[30px]">
-        <a class="text-white" href="">Поиск информации</a>
-        <a href="" class="pointer-events-none cursor-default text-white opacity-20">Генерация изображений</a>
-        <a href="" class="pointer-events-none cursor-default text-white opacity-20">Конспектирование</a>
+<header class="text-white pt-[42px]">
+    <div class="flex justify-between items-center">
+        <!-- Логотип -->
+        <div>
+            <img src=".\images\Лого.svg" alt="Простое изображение">
+        </div>
+    
+        <!-- Навигация для больших экранов -->
+        <div id="navLinks" class="hidden lg:flex space-x-[30px] font-medium text-[20px]">
+            <a href="" class="flex items-center text-white"><h1>Поиск информации</h1></a>
+            <a href="" class="flex items-center pointer-events-none cursor-default text-white opacity-20">Генерация изображений</a>
+            <a href="" class="flex items-center pointer-events-none cursor-default text-white opacity-20">Конспектирование</a>
+        </div>
+    
+        <!-- Бургер-меню для маленьких экранов -->
+        <div id="mobileMenuButton" class="lg:hidden flex items-center">
+            <button id="menuToggle" class="text-white focus:outline-none">
+                <!-- Иконка бургера -->
+                <svg id="menuIcon" class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
+                </svg>
+                <!-- Иконка закрытия (скрыта по умолчанию) -->
+                <svg id="closeIcon" class="w-8 h-8 hidden" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                </svg>
+            </button>
+        </div>
     </div>
-</div>
+    
+    <!-- Модальное окно для мобильного меню -->
+    <div id="mobileMenu" class="fixed inset-0 bg-black bg-opacity-75 z-50 hidden">
+        <div class="flex flex-col items-center justify-center h-full space-y-8">
+            <button id="closeMenu" class="absolute top-4 right-4 text-white">
+                <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                </svg>
+            </button>
+            <a href="" class="text-white text-2xl font-medium">Поиск информации</a>
+            <a href="" class="text-white text-2xl font-medium opacity-50 pointer-events-none">Генерация изображений</a>
+            <a href="" class="text-white text-2xl font-medium opacity-50 pointer-events-none">Конспектирование</a>
+        </div>
+    </div>
+    
+    <script>
+        const menuToggle = document.getElementById('menuToggle');
+        const closeMenu = document.getElementById('closeMenu');
+        const mobileMenu = document.getElementById('mobileMenu');
+        const menuIcon = document.getElementById('menuIcon');
+        const closeIcon = document.getElementById('closeIcon');
+    
+        menuToggle.addEventListener('click', () => {
+            mobileMenu.classList.toggle('hidden');
+            menuIcon.classList.toggle('hidden');
+            closeIcon.classList.toggle('hidden');
+        });
+    
+        closeMenu.addEventListener('click', () => {
+            mobileMenu.classList.add('hidden');
+            menuIcon.classList.remove('hidden');
+            closeIcon.classList.add('hidden');
+        });
+    
+        // Закрытие меню при клике вне его области (опционально)
+        mobileMenu.addEventListener('click', (e) => {
+            if (e.target === mobileMenu) {
+                mobileMenu.classList.add('hidden');
+                menuIcon.classList.remove('hidden');
+                closeIcon.classList.add('hidden');
+            }
+        });
+    </script>
 </header>
