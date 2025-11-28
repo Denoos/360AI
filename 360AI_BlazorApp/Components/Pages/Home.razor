@@ -9,6 +9,7 @@
 
 <PageTitle>Home</PageTitle>
 <!-- Блок поиска -->
+<!-- Блок поиска -->
 <div class="max-[600px]:mt-[42px] mt-[164.5px]">
     <h2 class="text-grayText font-medium text-[91px] leading-[120%] max-[600px]:text-[34px]">Введите свой запрос</h2>
     <div class="relative w-full">
@@ -55,52 +56,78 @@
 
             <!-- Скрипт для выбора изображения -->
             <script>
-                document.addEventListener('DOMContentLoaded', () => {
-                const imageInput = document.getElementById('imageInput');
-                const defaultButton = document.getElementById('defaultUploadButton');
-                const wrapper = document.getElementById('imageUploadWrapper');
-                const removeBtn = document.getElementById('removeImageBtn');
-                const replaceBtn = document.getElementById('replaceImageBtn');
+                    document.addEventListener('DOMContentLoaded', () => {
+                    const imageInput = document.getElementById('imageInput');
+                    const defaultButton = document.getElementById('defaultUploadButton');
+                    const wrapper = document.getElementById('imageUploadWrapper');
+                    const removeBtn = document.getElementById('removeImageBtn');
+                    const replaceBtn = document.getElementById('replaceImageBtn');
+                    const searchInput = document.getElementById('searchInput');
 
-
-                defaultButton.addEventListener('click', () => {
-                    imageInput.click();
-                });
-
-
-                replaceBtn.addEventListener('click', (e) => {
-                    e.stopPropagation();
-                    imageInput.click();
-                });
-
-
-                imageInput.addEventListener('change', (e) => {
-                    const file = e.target.files[0];
-                    if (file) {
-                    const reader = new FileReader();
-                    reader.onload = (event) => {
-                        wrapper.style.backgroundImage = `url(${event.target.result})`;
-                        wrapper.style.display = 'flex';
-                        defaultButton.style.display = 'none';
-                    };
-                    reader.readAsDataURL(file);
+                    // Функция для обновления состояния поля ввода
+                    function updateInputState() {
+                        if (wrapper.style.display === 'flex') {
+                            // Если изображение загружено (wrapper отображается), блокируем ввод
+                            searchInput.disabled = true;
+                            // Устанавливаем прозрачность текста в 0.1
+                            searchInput.style.color = 'rgba(255, 255, 255, 0.1)';
+                        } else {
+                            // Если wrapper скрыт (изображения нет), разрешаем ввод
+                            searchInput.disabled = false;
+                            // Сбрасываем прозрачность или устанавливаем обратно цвет по умолчанию
+                            searchInput.style.color = '';
+                        }
                     }
-                });
 
-                removeBtn.addEventListener('click', (e) => {
-                    e.stopPropagation();
-                    wrapper.style.backgroundImage = '';
-                    wrapper.style.display = 'none';
-                    defaultButton.style.display = 'flex';
-                    imageInput.value = '';
-                });
+                    defaultButton.addEventListener('click', () => {
+                        imageInput.click();
+                    });
+
+                    replaceBtn.addEventListener('click', (e) => {
+                        e.stopPropagation();
+                        imageInput.click();
+                    });
+
+                    imageInput.addEventListener('change', (e) => {
+                        const file = e.target.files[0];
+                        if (file) {
+                            // Устанавливаем имя файла в качестве значения input
+                            searchInput.value = file.name;
+
+                            const reader = new FileReader();
+                            reader.onload = (event) => {
+                                wrapper.style.backgroundImage = `url(${event.target.result})`;
+                                wrapper.style.display = 'flex';
+                                defaultButton.style.display = 'none';
+                                // Обновляем состояние поля ввода после загрузки изображения
+                                updateInputState();
+                            };
+                            reader.readAsDataURL(file);
+                        }
+                    });
+
+                    removeBtn.addEventListener('click', (e) => {
+                        e.stopPropagation();
+                        wrapper.style.backgroundImage = '';
+                        wrapper.style.display = 'none';
+                        defaultButton.style.display = 'flex';
+                        imageInput.value = '';
+                        // Очищаем поле ввода при удалении изображения
+                        searchInput.value = '';
+                        // Обновляем состояние поля ввода после удаления изображения
+                        updateInputState();
+                    });
+
+                    // Инициализируем состояние поля ввода при загрузке страницы
+                    updateInputState();
                 });
             </script>
+
             <!-- Поле ввода текста -->
             <input id="searchInput"
                    type="text" value="@searchResult"
                    placeholder="Поиск..."
-                   class="w-full h-[74px] bg-transparent text-white max-[600px]:text-[16px] text-[22px] font-medium leading-[120%] focus:outline-none focus:ring-0 border-0">
+                   class=" w-full h-[74px] bg-transparent text-white max-[600px]:text-[16px] text-[22px] font-medium leading-[120%] focus:outline-none focus:ring-0 border-0" />
 
             <!-- Кнопка очистки текста (крестик) -->
             <button id="clearButton"
@@ -130,8 +157,8 @@
         </div>
         <!-- Скрипт для очистки -->
         <script>
-            let input = document.getElementById('searchInput');
-            let clearBtn = document.getElementById('clearButton');
+            const input = document.getElementById('searchInput');
+            const clearBtn = document.getElementById('clearButton');
 
             // Показываем/скрываем крестик в зависимости от наличия текста
             input.addEventListener('input', () => {
@@ -155,40 +182,12 @@
         <!-- Фильтры по типу -->
         <div class="max-[600px]:mt-5 mt-[37px]">
             <p class="max-[600px]:text-[15px] max-[600px]:leading-[150%] text-[21px] font-normal leading-[200%] text-white">По запросу <span class="text-greenText">«График роста продаж по Q3»</span> найдено 36 совпадений:</p>
-            <div id="filter-buttons-container" class="max-[600px]:mt-[16px] mt-7 flex space-x-2.5 text-white font-medium text-base">
-                <button id="btn-all" class="bg-greenBlock px-[18px] h-[52px] rounded-xl">Все (<span>36</span>)</button>
-                <button id="btn-video" class="bg-[#F2F7FF29] px-[18px] h-[52px] rounded-xl">Видео (<span>10</span>)</button>
-                <button id="btn-image" class="bg-[#F2F7FF29] px-[18px] h-[52px] rounded-xl">Изображения (<span>20</span>)</button>
-                <button id="btn-article" class="bg-[#F2F7FF29] px-[18px] h-[52px] rounded-xl">Статьи (<span>20</span>)</button>
+            <div id="filter-buttons-container" class="max-[600px]:overflow-x-auto max-[600px]:scrollbar-hide max-[600px]:[-ms-overflow-style:none] max-[600px]:[scrollbar-width:none] max-[600px]:overflow-hidden max-[600px]:mt-[16px] mt-7 flex space-x-2.5 text-white font-medium text-base">
+                <button id="btn-all" class="whitespace-nowrap bg-greenBlock px-[18px] h-[52px] rounded-xl">Все (<span>36</span>)</button>
+                <button id="btn-video" class="whitespace-nowrap bg-[#F2F7FF29] px-[18px] h-[52px] rounded-xl">Видео (<span>10</span>)</button>
+                <button id="btn-image" class="whitespace-nowrap bg-[#F2F7FF29] px-[18px] h-[52px] rounded-xl">Изображения (<span>20</span>)</button>
+                <button id="btn-article" class="whitespace-nowrap bg-[#F2F7FF29] px-[18px] h-[52px] rounded-xl">Статьи (<span>20</span>)</button>
             </div>
-
-            <script>
-                document.addEventListener('DOMContentLoaded', function () {
-                    // Находим контейнер по id
-                    const container = document.getElementById('filter-buttons-container');
-                    // Находим все кнопки внутри этого контейнера
-                    const buttons = container.querySelectorAll('button'); // Или container.children, если нужны только непосредственные дочерние элементы-кнопки
-
-                    const activeClass = 'bg-greenBlock';
-                    const inactiveClass = 'bg-[#F2F7FF29]';
-
-                    buttons.forEach(button => {
-                        button.addEventListener('click', function () {
-                            // Сбрасываем состояние всех кнопок
-                            buttons.forEach(btn => {
-                                btn.classList.remove(activeClass);
-                                if (!btn.classList.contains(inactiveClass)) {
-                                    btn.classList.add(inactiveClass);
-                                }
-                            });
-
-                            // Устанавливаем активное состояние для текущей кнопки
-                            this.classList.remove(inactiveClass);
-                            this.classList.add(activeClass);
-                        });
-                    });
-                });
-            </script>
         </div>
         <div class="max-[600px]:mt-5 mt-[69px] w-full border border-[#FFFFFF21]"></div>
     </div>
@@ -197,7 +196,7 @@
 <!-- Блок выдачи -->
 <div class="max-[600px]:mt-10 mt-16 flex justify-between">
     <!-- Блок с прокручиваемыми кнопками -->
-    <div class="flex-1 min-w-0 mr-4 overflow-x-auto scrollbar-hide overflow-hidden [-ms-overflow-style:none] [scrollbar-width:none]" ">
+    <div class="flex-1 min-w-0 mr-4 overflow-x-auto scrollbar-hide overflow-hidden [-ms-overflow-style:none] [scrollbar-width:none]">
         <div class="flex space-x-2">
             <button class="whitespace-nowrap border border-[#B8C4D933] rounded-[9px] h-[42px] flex items-center px-4 text-sm font-normal leading-[130%] text-white">
                 #Hr-отдел
@@ -249,47 +248,18 @@
     </div>
 </div>
 
-<script>
-    document.addEventListener("DOMContentLoaded", () => {
-        const videoModal = document.getElementById('videoModal');
-        const videoPlayer = document.getElementById('videoPlayer');
-        const closeModal = document.getElementById('closeModal');
-
-        window.playVideo = function(src, startTime) {
-        videoPlayer.src = `${src}#t=${startTime}`;
-        videoModal.classList.remove('hidden');
-
-        videoPlayer.onloadedmetadata = () => {
-            videoPlayer.currentTime = startTime;
-        };
-        videoPlayer.play().catch(e => console.error("Ошибка воспроизведения:", e));
-        };
-
-
-        closeModal.onclick = () => {
-        videoModal.classList.add('hidden');
-        videoPlayer.pause();
-        videoPlayer.src = '';
-        };
-
-        // Закрытие по клику вне видео
-        videoModal.onclick = (e) => {
-        if (e.target === videoModal) {
-            closeModal.click();
-        }
-        };
-    });
-</script>
+@searchValue
 
 
 @code {
     private bool isMicrophoneActive = false;
     private IDisposable? speechRecognitionSubscription;
     private string searchResult;
+    private string searchValue;
 
     private async Task HandleSearch()
     {
-        
+
     }
 
     private async Task ToggleMicrophone()
