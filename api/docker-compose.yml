@@ -1,0 +1,26 @@
+services:
+  weaviate:
+    image: semitechnologies/weaviate:1.32.17-96f9033
+    ports:
+      - "8089:8080"
+      - "50051:50051"
+    environment:
+      QUERY_DEFAULTS_LIMIT: 25
+      AUTHENTICATION_ANONYMOUS_ACCESS_ENABLED: "true"
+      PERSISTENCE_DATA_PATH: "/var/lib/weaviate"
+      ENABLE_MODULES: "text2vec-transformers,multi2vec-clip"
+      TRANSFORMERS_INFERENCE_API: "http://t2v-transformers:8080"
+      CLIP_INFERENCE_API: "http://clip:8080"
+    depends_on:
+      - t2v-transformers
+      - clip
+
+  t2v-transformers:
+    image: semitechnologies/transformers-inference:eurobert-eurobert-2.1b
+    environment:
+      ENABLE_CUDA: "0"
+
+  clip:
+    image: semitechnologies/multi2vec-clip:xlm-roberta-base-ViT-B-32-laion5b_s13b_b90k
+    environment:
+      ENABLE_CUDA: "0"
