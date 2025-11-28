@@ -144,40 +144,65 @@
                 const wrapper = document.getElementById('imageUploadWrapper');
                 const removeBtn = document.getElementById('removeImageBtn');
                 const replaceBtn = document.getElementById('replaceImageBtn');
+                const searchInput = document.getElementById('searchInput');
 
-                
+                // Функция для обновления состояния поля ввода
+                function updateInputState() {
+                    if (wrapper.style.display === 'flex') {
+                        // Если изображение загружено (wrapper отображается), блокируем ввод
+                        searchInput.disabled = true;
+                        // Устанавливаем прозрачность текста в 0.1
+                        searchInput.style.color = 'rgba(255, 255, 255, 0.1)';
+                    } else {
+                        // Если wrapper скрыт (изображения нет), разрешаем ввод
+                        searchInput.disabled = false;
+                        // Сбрасываем прозрачность или устанавливаем обратно цвет по умолчанию
+                        searchInput.style.color = '';
+                    }
+                }
+
                 defaultButton.addEventListener('click', () => {
                     imageInput.click();
                 });
-
 
                 replaceBtn.addEventListener('click', (e) => {
                     e.stopPropagation();
                     imageInput.click();
                 });
 
-                
                 imageInput.addEventListener('change', (e) => {
                     const file = e.target.files[0];
                     if (file) {
-                    const reader = new FileReader();
-                    reader.onload = (event) => {
-                        wrapper.style.backgroundImage = `url(${event.target.result})`;
-                        wrapper.style.display = 'flex';
-                        defaultButton.style.display = 'none'; 
-                    };
-                    reader.readAsDataURL(file);
+                        // Устанавливаем имя файла в качестве значения input
+                        searchInput.value = file.name;
+
+                        const reader = new FileReader();
+                        reader.onload = (event) => {
+                            wrapper.style.backgroundImage = `url(${event.target.result})`;
+                            wrapper.style.display = 'flex';
+                            defaultButton.style.display = 'none';
+                            // Обновляем состояние поля ввода после загрузки изображения
+                            updateInputState();
+                        };
+                        reader.readAsDataURL(file);
                     }
                 });
 
                 removeBtn.addEventListener('click', (e) => {
                     e.stopPropagation();
                     wrapper.style.backgroundImage = '';
-                    wrapper.style.display = 'none'; 
+                    wrapper.style.display = 'none';
                     defaultButton.style.display = 'flex';
                     imageInput.value = '';
+                    // Очищаем поле ввода при удалении изображения
+                    searchInput.value = '';
+                    // Обновляем состояние поля ввода после удаления изображения
+                    updateInputState();
                 });
-                });
+
+                // Инициализируем состояние поля ввода при загрузке страницы
+                updateInputState();
+            });
             </script>
           
               <!-- Поле ввода текста -->
@@ -185,7 +210,7 @@
                 id="searchInput"
                 type="text" 
                 placeholder="Поиск..."
-                class="w-full h-[74px] bg-transparent text-white max-[600px]:text-[16px] text-[22px] font-medium leading-[120%] focus:outline-none focus:ring-0 border-0"
+                class=" w-full h-[74px] bg-transparent text-white max-[600px]:text-[16px] text-[22px] font-medium leading-[120%] focus:outline-none focus:ring-0 border-0"
               />
           
               <!-- Кнопка очистки текста (крестик) -->
@@ -243,11 +268,11 @@
             <!-- Фильтры по типу -->
             <div class="max-[600px]:mt-5 mt-[37px]">
                 <p class="max-[600px]:text-[15px] max-[600px]:leading-[150%] text-[21px] font-normal leading-[200%] text-white">По запросу <span class="text-greenText">«График роста продаж по Q3»</span> найдено 36 совпадений:</p>
-                <div id="filter-buttons-container" class="max-[600px]:mt-[16px] mt-7 flex space-x-2.5 text-white font-medium text-base">
-                    <button id="btn-all" class="bg-greenBlock px-[18px] h-[52px] rounded-xl">Все (<span>36</span>)</button>
-                    <button id="btn-video" class="bg-[#F2F7FF29] px-[18px] h-[52px] rounded-xl">Видео (<span>10</span>)</button>
-                    <button id="btn-image" class="bg-[#F2F7FF29] px-[18px] h-[52px] rounded-xl">Изображения (<span>20</span>)</button>
-                    <button id="btn-article" class="bg-[#F2F7FF29] px-[18px] h-[52px] rounded-xl">Статьи (<span>20</span>)</button>
+                <div id="filter-buttons-container" class="max-[600px]:overflow-x-auto max-[600px]:scrollbar-hide max-[600px]:[-ms-overflow-style:none] max-[600px]:[scrollbar-width:none] max-[600px]:overflow-hidden max-[600px]:mt-[16px] mt-7 flex space-x-2.5 text-white font-medium text-base">
+                    <button id="btn-all" class="whitespace-nowrap bg-greenBlock px-[18px] h-[52px] rounded-xl">Все (<span>36</span>)</button>
+                    <button id="btn-video" class="whitespace-nowrap bg-[#F2F7FF29] px-[18px] h-[52px] rounded-xl">Видео (<span>10</span>)</button>
+                    <button id="btn-image" class="whitespace-nowrap bg-[#F2F7FF29] px-[18px] h-[52px] rounded-xl">Изображения (<span>20</span>)</button>
+                    <button id="btn-article" class="whitespace-nowrap bg-[#F2F7FF29] px-[18px] h-[52px] rounded-xl">Статьи (<span>20</span>)</button>
                 </div>
                 
                 <script>
@@ -286,7 +311,7 @@
     <!-- Блок выдачи -->
     <div class="max-[600px]:mt-10 mt-16 flex justify-between">
         <!-- Блок с прокручиваемыми кнопками -->
-        <div class="flex-1 min-w-0 mr-4 overflow-x-auto scrollbar-hide overflow-hidden [-ms-overflow-style:none] [scrollbar-width:none]"">
+        <div class="flex-1 min-w-0 mr-4 overflow-x-auto scrollbar-hide overflow-hidden [-ms-overflow-style:none] [scrollbar-width:none]">
             <div class="flex space-x-2">
                 <button class="whitespace-nowrap border border-[#B8C4D933] rounded-[9px] h-[42px] flex items-center px-4 text-sm font-normal leading-[130%] text-white">
                     #Hr-отдел
@@ -342,11 +367,14 @@
 
     <!-- Видосы -->
     <div class="mt-10">
-        <div class="grid max-[1380px]:grid-cols-1 max-[1875px]:grid-cols-2 grid-cols-3 gap-6">
+        <div class="max-[600px]:flex-row max-[600px]:overflow-x-auto max-[600px]:space-x-2 max-[600px]:w-full max-[600px]:no-scrollbar max-[600px]:scrollbar-hide max-[600px]:[-ms-overflow-style:none] max-[600px]:[scrollbar-width:none] max-[600px]:flex min-[600px]:grid max-[1380px]:grid-cols-1 max-[1875px]:grid-cols-2 grid-cols-3 min-[600px]:gap-6">
             <!-- Видео 1 -->
-             <div class="w-[496px] relative">
-                <div class="bg-white relative rounded-[40px] shadow-lg overflow-hidden bg-[url('../image.png')] bg-cover h-[370px]">
-                    <button class="h-full w-full flex justify-center items-center" onclick="playVideo('hero.webm', 4)">
+            <div class="max-[600px]:flex-shrink-0 max-[600px]:w-[314px] w-[496px] relative">
+                <!-- убрали max-[600px]:h-[234px] -->
+                <div class="max-[600px]:h-[234px] bg-white relative rounded-[40px] shadow-lg overflow-hidden bg-[url('../image.png')] bg-cover h-[370px]">
+                  <!-- превью фиксированной высоты -->
+                  <button class="max-[600px]:h-[234px] h-full w-full flex justify-center items-center" onclick="playVideo('hero.webm', 4)">
+                    <button class="max-[600px]:h-[234px] h-full w-full flex justify-center items-center" onclick="playVideo('hero.webm', 4)">
                         <div class="size-[63px] rounded-full bg-[#191919] text-[#40E75E] flex justify-center items-center">
                             <svg width="16" height="18" viewBox="0 0 16 18" fill="none" xmlns="http://www.w3.org/2000/svg">
                                 <path d="M14.853 6.85557C16.2247 7.61758 16.2247 9.59019 14.853 10.3522L2.97129 16.9532C1.63822 17.6938 -7.9231e-07 16.7298 -7.25651e-07 15.2049L-1.48576e-07 2.00291C-8.19178e-08 0.477941 1.63822 -0.485995 2.97129 0.254595L14.853 6.85557Z" fill="url(#paint0_linear_38_78)"/>
@@ -373,8 +401,8 @@
             </div>
 
             <!-- Видео 2 -->
-            <div class="w-[496px] relative">
-                <div class="bg-white relative rounded-[40px] shadow-lg overflow-hidden bg-[url('../image.png')] bg-cover h-[370px]">
+            <div class="max-[600px]:flex-shrink-0 max-[600px]:w-[314px] max-[600px]:h-[234px] w-[496px] relative">
+                <div class="max-[600px]:h-[234px] bg-white relative rounded-[40px] shadow-lg overflow-hidden bg-[url('../image.png')] bg-cover h-[370px]">
                     <button class="h-full w-full flex justify-center items-center" onclick="playVideo('hero.webm', 4)">
                         <div class="size-[63px] rounded-full bg-[#191919] text-[#40E75E] flex justify-center items-center">
                             <svg width="16" height="18" viewBox="0 0 16 18" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -402,8 +430,8 @@
             </div>
 
             <!-- Видео 3 -->
-            <div class="w-[496px] relative">
-                <div class="bg-white relative rounded-[40px] shadow-lg overflow-hidden bg-[url('../image.png')] bg-cover h-[370px]">
+            <div class="max-[600px]:flex-shrink-0 max-[600px]:w-[314px] max-[600px]:h-[234px] w-[496px] relative">
+                <div class="max-[600px]:h-[234px] bg-white relative rounded-[40px] shadow-lg overflow-hidden bg-[url('../image.png')] bg-cover h-[370px]">
                     <button class="h-full w-full flex justify-center items-center" onclick="playVideo('hero.webm', 4)">
                         <div class="size-[63px] rounded-full bg-[#191919] text-[#40E75E] flex justify-center items-center">
                             <svg width="16" height="18" viewBox="0 0 16 18" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -431,8 +459,8 @@
             </div>
 
             <!-- Видео 4 -->
-            <div class="w-[496px] relative">
-                <div class="bg-white relative rounded-[40px] shadow-lg overflow-hidden bg-[url('../image.png')] bg-cover h-[370px]">
+            <div class="max-[600px]:flex-shrink-0 max-[600px]:w-[314px] max-[600px]:h-[234px] w-[496px] relative">
+                <div class="max-[600px]:h-[234px] bg-white relative rounded-[40px] shadow-lg overflow-hidden bg-[url('../image.png')] bg-cover h-[370px]">
                     <button class="h-full w-full flex justify-center items-center" onclick="playVideo('hero.webm', 4)">
                         <div class="size-[63px] rounded-full bg-[#191919] text-[#40E75E] flex justify-center items-center">
                             <svg width="16" height="18" viewBox="0 0 16 18" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -510,26 +538,26 @@
     </script>
 
     <h2 class="max-[600px]:mt-10 mt-[120px] font-medium max-[600px]:text-[34px] text-[51px] text-white leading-[120%]">Изображения</h2>
-    <div class="mt-10 grid max-[1380px]:grid-cols-1 max-[1875px]:grid-cols-2 grid-cols-3 gap-6">
+    <div class="max-[600px]:flex max-[600px]:flex-row max-[600px]:overflow-x-auto max-[600px]:overflow-y-hidden max-[600px]:space-x-2 max-[600px]:w-full max-[600px]:no-scrollbar max-[600px]:scrollbar-hide max-[600px]:[-ms-overflow-style:none] max-[600px]:[scrollbar-width:none] mt-10 min-[600px]:grid max-[1380px]:grid-cols-1 max-[1875px]:grid-cols-2 grid-cols-3 min-[600px]:gap-6">
         <!-- Преза 1 -->
-         <div class="w-[496px] relative">
-            <a href="">
-                <div class="bg-white relative rounded-[40px] shadow-lg overflow-hidden bg-[url('../image_preza.png')] bg-cover h-[370px]">
-                </div>
-            </a>
-            <div class="absolute -mt-[60px] ml-5 py-1.5 px-4 leading-[200%] z-10 text-[#373737] font-semibold text-sm bg-white rounded-[20px]">
-                #Hr-отдел
+        <div class="max-[600px]:flex-shrink-0 max-[600px]:w-[314px] w-[496px] relative">
+          <a href="">
+            <div class="bg-white relative rounded-[40px] shadow-lg overflow-hidden bg-[url('../image_preza.png')] bg-cover max-[600px]:h-[234px] h-[370px]">
             </div>
-            <div class="mt-[30px]">
-                <h3 class="text-[24px] font-medium leading-[150%] text-white">Динамика увеличения объёмов продаж за третий квартал</h3>
-                <p class="text-[#6D6778] mt-[19px] font-normal text-base">14 октября 2025 года</p>
-            </div>
+          </a>
+          <div class="absolute -mt-[60px] ml-5 py-1.5 px-4 leading-[200%] z-10 text-[#373737] font-semibold text-sm bg-white rounded-[20px]">
+            #Hr-отдел
+          </div>
+          <div class="mt-[30px]">
+            <h3 class="text-[24px] font-medium leading-[150%] text-white">Динамика увеличения объёмов продаж за третий квартал</h3>
+            <p class="text-[#6D6778] mt-[19px] font-normal text-base">14 октября 2025 года</p>
+          </div>
         </div>
 
         <!-- Преза 2 -->
-        <div class="w-[496px] relative">
+        <div class="max-[600px]:flex-shrink-0 max-[600px]:w-[314px] max-[600px]:h-[234px] w-[496px] relative">
             <a href="">
-                <div class="bg-white relative rounded-[40px] shadow-lg overflow-hidden bg-[url('../image_preza.png')] bg-cover h-[370px]">
+                <div class="bg-white relative rounded-[40px] shadow-lg overflow-hidden bg-[url('../image_preza.png')] bg-cover max-[600px]:h-[234px] h-[370px]">
                 </div>
             </a>
             <div class="absolute -mt-[60px] ml-5 py-1.5 px-4 leading-[200%] z-10 text-[#373737] font-semibold text-sm bg-white rounded-[20px]">
@@ -542,9 +570,9 @@
         </div>
 
         <!-- Преза 3 -->
-        <div class="w-[496px] relative">
+        <div class="max-[600px]:flex-shrink-0 max-[600px]:w-[314px] max-[600px]:h-[234px] w-[496px] relative">
             <a href="">
-                <div class="bg-white relative rounded-[40px] shadow-lg overflow-hidden bg-[url('../image_preza.png')] bg-cover h-[370px]">
+                <div class="bg-white relative rounded-[40px] shadow-lg overflow-hidden bg-[url('../image_preza.png')] bg-cover max-[600px]:h-[234px] h-[370px]">
                 </div>
             </a>
             <div class="absolute -mt-[60px] ml-5 py-1.5 px-4 leading-[200%] z-10 text-[#373737] font-semibold text-sm bg-white rounded-[20px]">
@@ -558,7 +586,7 @@
     </div>
 
     <h2 class="max-[600px]:mt-[60px] mt-[120px] font-medium max-[600px]:text-[34px] text-[51px] text-white leading-[120%]">Статьи</h2>
-    <div class="flex min-[600px]:flex-col max-[600px]:flex-row max-[600px]:overflow-x-auto max-[600px]:space-x-2 max-[600px]:w-full max-[600px]:pb-2 max-[600px]:no-scrollbar">
+    <div class="flex min-[600px]:flex-col max-[600px]:flex-row max-[600px]:overflow-x-auto max-[600px]:space-x-2 max-[600px]:w-full max-[600px]:pb-2 max-[600px]:no-scrollbar max-[600px]:scrollbar-hide max-[600px]:[-ms-overflow-style:none] max-[600px]:[scrollbar-width:none]">
         <div class="max-[600px]:flex-shrink-0 max-[600px]:w-[314px] max-[600px]:h-[301px] mt-5 rounded-[40px] py-[50px] pl-[65px] max-[1343px]:pr-[65px] pr-[297px] max-[600px]:px-6 max-[600px]:py-[34px] bg-[#FFFFFF0D] text-white max-[600px]:overflow-hidden">
             <h3 class="font-semibold max-[600px]:text-[22px] max-[600px]:leading-[120%] text-[28px]">
                 <a href="#">Пресс-центр</a>
