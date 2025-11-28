@@ -11,6 +11,7 @@ builder.Services.AddSpeechRecognitionServices();
 builder.Services.AddScoped<VoiceNavigationService>();
 builder.Services.AddScoped<VoiceSearchService>();
 builder.Services.AddScoped<SearchExecutorService>();
+builder.Services.AddHttpClient();
 
 var app = builder.Build();
 

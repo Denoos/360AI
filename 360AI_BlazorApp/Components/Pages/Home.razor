@@ -5,6 +5,7 @@
 @inject SearchExecutorService Searcher
 @inject ISpeechRecognitionService SpeechRecognitionService
 @using _360AI_BlazorApp.Components.Services
+@inject HttpClient client
 
 @page "/"
 
@@ -126,7 +127,9 @@
 
             <!-- Поле ввода текста -->
             <input id="searchInput"
-                   type="text" value="@searchResult"
+                   type="text"
+                   @bind="searchResult"
+                   @bind:event="oninput"
                    placeholder="Поиск..."
                    class=" w-full h-[74px] bg-transparent text-white max-[600px]:text-[16px] text-[22px] font-medium leading-[120%] focus:outline-none focus:ring-0 border-0" />
 
@@ -257,16 +260,14 @@
             switch (item.MediaType)
             {
                 case "text":
+                case null:
                     <div class="max-[600px]:flex-shrink-0 max-[600px]:w-[314px] max-[600px]:h-[301px] mt-5 rounded-[40px] py-[50px] pl-[65px] max-[1343px]:pr-[65px] pr-[297px] max-[600px]:px-6 max-[600px]:py-[34px] bg-[#FFFFFF0D] text-white max-[600px]:overflow-hidden">
                         <h3 class="font-semibold max-[600px]:text-[22px] max-[600px]:leading-[120%] text-[28px]">
-                            <a href="#">@item.Source</a>
+                            <a href="#">@item.Id</a>
                         </h3>
                         <p class="max-[600px]:leading-[170%] leading-[200%] max-[600px]:text-base text-[21px] font-normal max-[600px]:mt-4 mt-5
-                                                                            max-[600px]:overflow-hidden
-                                                                            max-[600px]:text-ellipsis
                                                                             max-[600px]:h-[190px]">
                             @item.Content
-                            <span class="text-[#2DF093] underline">График роста продаж по Q3</span> пресс-службы Телефон: +7 (423) 230-69-05 Эл. адрес: pr@vvo.aero Форма обратной связи Предложения, отзывы и вопросы об услугах и сервисах аэропорта,...
                         </p>
                     </div>
                     break;
@@ -277,7 +278,6 @@
                             </div>
                         </a>
                         <div class="absolute -mt-[60px] ml-5 py-1.5 px-4 leading-[200%] z-10 text-[#373737] font-semibold text-sm bg-white rounded-[20px]">
-                            @item.Content
                         </div>
                     </div>
                     break;
@@ -372,12 +372,12 @@
 @code {
     private bool isMicrophoneActive = false;
     private IDisposable? speechRecognitionSubscription;
-    private string searchResult;
+    public string searchResult ="";
     private Models.OurModels[] searchValue;
 
     private async Task HandleSearch()
     {
-        searchValue = await Searcher.HandleSerch(searchResult);
+        searchValue = await Searcher.HandleSerch(searchResult, client);
     }
 
     private async Task ToggleMicrophone()
