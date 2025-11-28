@@ -823,9 +823,6 @@
   .gap-5 {
     gap: calc(var(--spacing) * 5);
   }
-  .gap-6 {
-    gap: calc(var(--spacing) * 6);
-  }
   .space-y-8 {
     :where(& > :not(:last-child)) {
       --tw-space-y-reverse: 0;
@@ -1484,16 +1481,6 @@
       padding-top: calc(var(--spacing) * 7);
     }
   }
-  .max-\[600px\]\:absolute {
-    @media (width < 600px) {
-      position: absolute;
-    }
-  }
-  .max-\[600px\]\:left-0 {
-    @media (width < 600px) {
-      left: calc(var(--spacing) * 0);
-    }
-  }
   .max-\[600px\]\:mt-4 {
     @media (width < 600px) {
       margin-top: calc(var(--spacing) * 4);
@@ -1544,11 +1531,6 @@
       display: flex;
     }
   }
-  .max-\[600px\]\:grid {
-    @media (width < 600px) {
-      display: grid;
-    }
-  }
   .max-\[600px\]\:hidden {
     @media (width < 600px) {
       display: none;
@@ -1596,26 +1578,6 @@
       height: 301px;
     }
   }
-  .max-\[600px\]\:h-auto {
-    @media (width < 600px) {
-      height: auto;
-    }
-  }
-  .max-\[600px\]\:h-max {
-    @media (width < 600px) {
-      height: max-content;
-    }
-  }
-  .max-\[600px\]\:max-h-\[234px\] {
-    @media (width < 600px) {
-      max-height: 234px;
-    }
-  }
-  .max-\[600px\]\:min-h-\[234px\] {
-    @media (width < 600px) {
-      min-height: 234px;
-    }
-  }
   .max-\[600px\]\:w-\[13px\] {
     @media (width < 600px) {
       width: 13px;
@@ -1646,9 +1608,23 @@
       flex-shrink: 0;
     }
   }
+  .max-\[600px\]\:flex-col {
+    @media (width < 600px) {
+      flex-direction: column;
+    }
+  }
   .max-\[600px\]\:flex-row {
     @media (width < 600px) {
       flex-direction: row;
+    }
+  }
+  .max-\[600px\]\:space-y-2 {
+    @media (width < 600px) {
+      :where(& > :not(:last-child)) {
+        --tw-space-y-reverse: 0;
+        margin-block-start: calc(calc(var(--spacing) * 2) * var(--tw-space-y-reverse));
+        margin-block-end: calc(calc(var(--spacing) * 2) * calc(1 - var(--tw-space-y-reverse)));
+      }
     }
   }
   .max-\[600px\]\:space-x-2 {
@@ -1767,11 +1743,6 @@
   .min-\[600px\]\:ml-1\.5 {
     @media (width >= 600px) {
       margin-left: calc(var(--spacing) * 1.5);
-    }
-  }
-  .min-\[600px\]\:flex {
-    @media (width >= 600px) {
-      display: flex;
     }
   }
   .min-\[600px\]\:grid {

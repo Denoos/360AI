@@ -274,34 +274,6 @@
                     <button id="btn-image" class="whitespace-nowrap bg-[#F2F7FF29] px-[18px] h-[52px] rounded-xl">Изображения (<span>20</span>)</button>
                     <button id="btn-article" class="whitespace-nowrap bg-[#F2F7FF29] px-[18px] h-[52px] rounded-xl">Статьи (<span>20</span>)</button>
                 </div>
-                
-                <script>
-                    document.addEventListener('DOMContentLoaded', function () {
-                        // Находим контейнер по id
-                        const container = document.getElementById('filter-buttons-container');
-                        // Находим все кнопки внутри этого контейнера
-                        const buttons = container.querySelectorAll('button'); // Или container.children, если нужны только непосредственные дочерние элементы-кнопки
-                    
-                        const activeClass = 'bg-greenBlock';
-                        const inactiveClass = 'bg-[#F2F7FF29]';
-                    
-                        buttons.forEach(button => {
-                            button.addEventListener('click', function () {
-                                // Сбрасываем состояние всех кнопок
-                                buttons.forEach(btn => {
-                                    btn.classList.remove(activeClass);
-                                    if (!btn.classList.contains(inactiveClass)) {
-                                        btn.classList.add(inactiveClass);
-                                    }
-                                });
-                    
-                                // Устанавливаем активное состояние для текущей кнопки
-                                this.classList.remove(inactiveClass);
-                                this.classList.add(activeClass);
-                            });
-                        });
-                    });
-                </script>
             </div>
             <div class="max-[600px]:mt-5 mt-[69px] w-full border border-[#FFFFFF21]"></div>
         </div>
@@ -363,18 +335,16 @@
         </div>
     </div>
 
-    <h2 class="max-[600px]:mt-10 mt-[62px] font-medium max-[600px]:text-[34px] text-[51px] text-white leading-[120%]">Видео</h2>
+    <h2 id="video-container1" class="max-[600px]:mt-10 mt-[62px] font-medium max-[600px]:text-[34px] text-[51px] text-white leading-[120%]">Видео</h2>
 
     <!-- Видосы -->
     <div class="mt-10">
-        <div class="max-[600px]:flex-row max-[600px]:overflow-x-auto max-[600px]:space-x-2 max-[600px]:w-full max-[600px]:no-scrollbar max-[600px]:scrollbar-hide max-[600px]:[-ms-overflow-style:none] max-[600px]:[scrollbar-width:none] max-[600px]:flex min-[600px]:grid max-[1380px]:grid-cols-1 max-[1875px]:grid-cols-2 grid-cols-3 min-[600px]:gap-6">
+        <div  id="video-container" class="max-[600px]:flex-row max-[600px]:overflow-x-auto max-[600px]:space-x-2 max-[600px]:w-full max-[600px]:no-scrollbar max-[600px]:scrollbar-hide max-[600px]:[-ms-overflow-style:none] max-[600px]:[scrollbar-width:none] max-[600px]:flex min-[600px]:grid max-[1380px]:grid-cols-1 max-[1875px]:grid-cols-2 grid-cols-3 min-[600px]:gap-6">
             <!-- Видео 1 -->
             <div class="max-[600px]:flex-shrink-0 max-[600px]:w-[314px] w-[496px] relative">
-                <!-- убрали max-[600px]:h-[234px] -->
                 <div class="max-[600px]:h-[234px] bg-white relative rounded-[40px] shadow-lg overflow-hidden bg-[url('../image.png')] bg-cover h-[370px]">
                   <!-- превью фиксированной высоты -->
                   <button class="max-[600px]:h-[234px] h-full w-full flex justify-center items-center" onclick="playVideo('hero.webm', 4)">
-                    <button class="max-[600px]:h-[234px] h-full w-full flex justify-center items-center" onclick="playVideo('hero.webm', 4)">
                         <div class="size-[63px] rounded-full bg-[#191919] text-[#40E75E] flex justify-center items-center">
                             <svg width="16" height="18" viewBox="0 0 16 18" fill="none" xmlns="http://www.w3.org/2000/svg">
                                 <path d="M14.853 6.85557C16.2247 7.61758 16.2247 9.59019 14.853 10.3522L2.97129 16.9532C1.63822 17.6938 -7.9231e-07 16.7298 -7.25651e-07 15.2049L-1.48576e-07 2.00291C-8.19178e-08 0.477941 1.63822 -0.485995 2.97129 0.254595L14.853 6.85557Z" fill="url(#paint0_linear_38_78)"/>
@@ -537,8 +507,8 @@
         });
     </script>
 
-    <h2 class="max-[600px]:mt-10 mt-[120px] font-medium max-[600px]:text-[34px] text-[51px] text-white leading-[120%]">Изображения</h2>
-    <div class="max-[600px]:flex max-[600px]:flex-row max-[600px]:overflow-x-auto max-[600px]:overflow-y-hidden max-[600px]:space-x-2 max-[600px]:w-full max-[600px]:no-scrollbar max-[600px]:scrollbar-hide max-[600px]:[-ms-overflow-style:none] max-[600px]:[scrollbar-width:none] mt-10 min-[600px]:grid max-[1380px]:grid-cols-1 max-[1875px]:grid-cols-2 grid-cols-3 min-[600px]:gap-6">
+    <h2 id="presentation-container1" class="max-[600px]:mt-10 mt-[120px] font-medium max-[600px]:text-[34px] text-[51px] text-white leading-[120%]">Изображения</h2>
+    <div  id="presentation-container" class="max-[600px]:flex max-[600px]:flex-row max-[600px]:overflow-x-auto max-[600px]:overflow-y-hidden max-[600px]:space-x-2 max-[600px]:w-full max-[600px]:no-scrollbar max-[600px]:scrollbar-hide max-[600px]:[-ms-overflow-style:none] max-[600px]:[scrollbar-width:none] mt-10 min-[600px]:grid max-[1380px]:grid-cols-1 max-[1875px]:grid-cols-2 grid-cols-3 min-[600px]:gap-6">
         <!-- Преза 1 -->
         <div class="max-[600px]:flex-shrink-0 max-[600px]:w-[314px] w-[496px] relative">
           <a href="">
@@ -585,8 +555,8 @@
         </div>
     </div>
 
-    <h2 class="max-[600px]:mt-[60px] mt-[120px] font-medium max-[600px]:text-[34px] text-[51px] text-white leading-[120%]">Статьи</h2>
-    <div class="flex min-[600px]:flex-col max-[600px]:flex-row max-[600px]:overflow-x-auto max-[600px]:space-x-2 max-[600px]:w-full max-[600px]:pb-2 max-[600px]:no-scrollbar max-[600px]:scrollbar-hide max-[600px]:[-ms-overflow-style:none] max-[600px]:[scrollbar-width:none]">
+    <h2 id="article-container1" class="max-[600px]:mt-[60px] mt-[120px] font-medium max-[600px]:text-[34px] text-[51px] text-white leading-[120%]">Статьи</h2>
+    <div id="article-container" class="flex min-[600px]:flex-col max-[600px]:flex-row max-[600px]:overflow-x-auto max-[600px]:space-x-2 max-[600px]:w-full max-[600px]:pb-2 max-[600px]:no-scrollbar max-[600px]:scrollbar-hide max-[600px]:[-ms-overflow-style:none] max-[600px]:[scrollbar-width:none]">
         <div class="max-[600px]:flex-shrink-0 max-[600px]:w-[314px] max-[600px]:h-[301px] mt-5 rounded-[40px] py-[50px] pl-[65px] max-[1343px]:pr-[65px] pr-[297px] max-[600px]:px-6 max-[600px]:py-[34px] bg-[#FFFFFF0D] text-white max-[600px]:overflow-hidden">
             <h3 class="font-semibold max-[600px]:text-[22px] max-[600px]:leading-[120%] text-[28px]">
                 <a href="#">Пресс-центр</a>
@@ -625,11 +595,82 @@
                 <span class="text-[#2DF093] underline">График роста продаж по Q3</span> пресс-службы Телефон: +7 (423) 230-69-05 Эл. адрес: pr@vvo.aero Форма обратной связи Предложения, отзывы и вопросы об услугах и сервисах аэропорта,...
             </p>
         </div>
-
-
 
         
+        <!-- Фильтры по типу -->
+        <script>
+            document.addEventListener('DOMContentLoaded', function () {
+                const container = document.getElementById('filter-buttons-container');
+                const buttons = container.querySelectorAll('button');
         
+                const containerPairs = {
+                    'btn-all': null, 
+                    'btn-video': [
+                        document.getElementById('video-container'),
+                        document.getElementById('video-container1')
+                    ],
+                    'btn-image': [
+                        document.getElementById('presentation-container'),
+                        document.getElementById('presentation-container1')
+                    ],
+                    'btn-article': [
+                        document.getElementById('article-container'),
+                        document.getElementById('article-container1')
+                    ]
+                };
+        
+                const activeClass = 'bg-greenBlock';
+                const inactiveClass = 'bg-[#F2F7FF29]';
+        
+                buttons.forEach(button => {
+                    button.addEventListener('click', function () {
+                        const buttonId = this.id;
+        
+                        buttons.forEach(btn => {
+                            btn.classList.remove(activeClass);
+                            if (!btn.classList.contains(inactiveClass)) {
+                                btn.classList.add(inactiveClass);
+                            }
+                        });
+        
+                        this.classList.remove(inactiveClass);
+                        this.classList.add(activeClass);
+        
+                        // Скрываем все контейнеры (все пары)
+                        Object.values(containerPairs).forEach(pair => {
+                            if (Array.isArray(pair)) { 
+                                pair.forEach(container => {
+                                    if (container) { 
+                                        container.style.display = 'none';
+                                    }
+                                });
+                            }
+                        });
+        
+                        if (containerPairs[buttonId]) {
+                            const containersToShow = containerPairs[buttonId];
+                            containersToShow.forEach(container => {
+                                if (container) {
+                                    const displayType = window.getComputedStyle(container).display.includes('grid') ? 'grid' : 'flex';
+                                    container.style.display = displayType;
+                                }
+                            });
+                        } else if (buttonId === 'btn-all') {
+                            Object.values(containerPairs).forEach(pair => {
+                                if (Array.isArray(pair)) {
+                                    pair.forEach(container => {
+                                        if (container) {
+                                            const displayType = window.getComputedStyle(container).display.includes('grid') ? 'grid' : 'flex';
+                                            container.style.display = displayType;
+                                        }
+                                    });
+                                }
+                            });
+                        }
+                    });
+                });
+            });
+        </script>
         
     </div>
 
