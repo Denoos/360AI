@@ -249,14 +249,131 @@
     </div>
 </div>
 
-@searchValue
+<div class="mt-10">
+
+    @if (searchValue != null)
+        @foreach (var item in searchValue)
+        {
+            switch (item.MediaType)
+            {
+                case "text":
+                    <div class="max-[600px]:flex-shrink-0 max-[600px]:w-[314px] max-[600px]:h-[301px] mt-5 rounded-[40px] py-[50px] pl-[65px] max-[1343px]:pr-[65px] pr-[297px] max-[600px]:px-6 max-[600px]:py-[34px] bg-[#FFFFFF0D] text-white max-[600px]:overflow-hidden">
+                        <h3 class="font-semibold max-[600px]:text-[22px] max-[600px]:leading-[120%] text-[28px]">
+                            <a href="#">@item.Source</a>
+                        </h3>
+                        <p class="max-[600px]:leading-[170%] leading-[200%] max-[600px]:text-base text-[21px] font-normal max-[600px]:mt-4 mt-5
+                                                                            max-[600px]:overflow-hidden
+                                                                            max-[600px]:text-ellipsis
+                                                                            max-[600px]:h-[190px]">
+                            @item.Content
+                            <span class="text-[#2DF093] underline">График роста продаж по Q3</span> пресс-службы Телефон: +7 (423) 230-69-05 Эл. адрес: pr@vvo.aero Форма обратной связи Предложения, отзывы и вопросы об услугах и сервисах аэропорта,...
+                        </p>
+                    </div>
+                    break;
+                case "image":
+                    <div class="max-[600px]:flex-shrink-0 max-[600px]:w-[314px] w-[496px] relative">
+                        <a href="">
+                            <div class="bg-white relative rounded-[40px] shadow-lg overflow-hidden bg-[url('@item.Source')] bg-cover max-[600px]:h-[234px] h-[370px]">
+                            </div>
+                        </a>
+                        <div class="absolute -mt-[60px] ml-5 py-1.5 px-4 leading-[200%] z-10 text-[#373737] font-semibold text-sm bg-white rounded-[20px]">
+                            @item.Content
+                        </div>
+                    </div>
+                    break;
+                default:
+                    <p>Временно не реализовано</p>
+                    break;
+
+            }
+
+        }
+
+
+
+    <!-- Фильтры по типу -->
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const container = document.getElementById('filter-buttons-container');
+            const buttons = container.querySelectorAll('button');
+
+            const containerPairs = {
+                'btn-all': null,
+                'btn-video': [
+                    document.getElementById('video-container'),
+                    document.getElementById('video-container1')
+                ],
+                'btn-image': [
+                    document.getElementById('presentation-container'),
+                    document.getElementById('presentation-container1')
+                ],
+                'btn-article': [
+                    document.getElementById('article-container'),
+                    document.getElementById('article-container1')
+                ]
+            };
+
+            const activeClass = 'bg-greenBlock';
+            const inactiveClass = 'bg-[#F2F7FF29]';
+
+            buttons.forEach(button => {
+                button.addEventListener('click', function () {
+                    const buttonId = this.id;
+
+                    buttons.forEach(btn => {
+                        btn.classList.remove(activeClass);
+                        if (!btn.classList.contains(inactiveClass)) {
+                            btn.classList.add(inactiveClass);
+                        }
+                    });
+
+                    this.classList.remove(inactiveClass);
+                    this.classList.add(activeClass);
+
+                    // Скрываем все контейнеры (все пары)
+                    Object.values(containerPairs).forEach(pair => {
+                        if (Array.isArray(pair)) {
+                            pair.forEach(container => {
+                                if (container) {
+                                    container.style.display = 'none';
+                                }
+                            });
+                        }
+                    });
+
+                    if (containerPairs[buttonId]) {
+                        const containersToShow = containerPairs[buttonId];
+                        containersToShow.forEach(container => {
+                            if (container) {
+                                const displayType = window.getComputedStyle(container).display.includes('grid') ? 'grid' : 'flex';
+                                container.style.display = displayType;
+                            }
+                        });
+                    } else if (buttonId === 'btn-all') {
+                        Object.values(containerPairs).forEach(pair => {
+                            if (Array.isArray(pair)) {
+                                pair.forEach(container => {
+                                    if (container) {
+                                        const displayType = window.getComputedStyle(container).display.includes('grid') ? 'grid' : 'flex';
+                                        container.style.display = displayType;
+                                    }
+                                });
+                            }
+                        });
+                    }
+                });
+            });
+        });
+    </script>
+
+</div>
 
 
 @code {
     private bool isMicrophoneActive = false;
     private IDisposable? speechRecognitionSubscription;
     private string searchResult;
-    private string searchValue;
+    private Models.OurModels[] searchValue;
 
     private async Task HandleSearch()
     {
