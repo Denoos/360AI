@@ -2,6 +2,7 @@
 
 @rendermode InteractiveServer
 @inject VoiceSearchService VoiceSearch
+@inject SearchExecutorService Searcher
 @inject ISpeechRecognitionService SpeechRecognitionService
 @using _360AI_BlazorApp.Components.Services
 
@@ -259,7 +260,7 @@
 
     private async Task HandleSearch()
     {
-
+        searchValue = await Searcher.HandleSerch(searchResult);
     }
 
     private async Task ToggleMicrophone()
