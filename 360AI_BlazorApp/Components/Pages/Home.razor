@@ -1,8 +1,14 @@
 ﻿@inherits LayoutComponentBase
+
+@rendermode InteractiveServer
+@inject VoiceSearchService VoiceSearch
+@inject ISpeechRecognitionService SpeechRecognitionService
+@using _360AI_BlazorApp.Components.Services
+
 @page "/"
 
 <PageTitle>Home</PageTitle>
-    <!-- Блок поиска -->
+<!-- Блок поиска -->
 <div class="max-[600px]:mt-[42px] mt-[164.5px]">
     <h2 class="text-grayText font-medium text-[91px] leading-[120%] max-[600px]:text-[34px]">Введите свой запрос</h2>
     <div class="relative w-full">
@@ -90,12 +96,11 @@
                 });
                 });
             </script>
-
             <!-- Поле ввода текста -->
             <input id="searchInput"
-                   type="text"
+                   type="text" value="@searchResult"
                    placeholder="Поиск..."
-                   class="w-full h-[74px] bg-transparent text-white max-[600px]:text-[16px] text-[22px] font-medium leading-[120%] focus:outline-none focus:ring-0 border-0" />
+                   class="w-full h-[74px] bg-transparent text-white max-[600px]:text-[16px] text-[22px] font-medium leading-[120%] focus:outline-none focus:ring-0 border-0">
 
             <!-- Кнопка очистки текста (крестик) -->
             <button id="clearButton"
@@ -107,7 +112,7 @@
             </button>
 
             <!-- Кнопка с иконкой справа -->
-            <button class="bg-[#5B595F] ml-[26px] max-[600px]:min-w-[38px] min-w-[74px] max-[600px]:w-[38px] w-[74px] max-[600px]:h-[38px] h-[74px] rounded-full flex items-center justify-center outline-[#FFFFFF29] focus:ring-0 focus:outline-1 order-2">
+            <button @onclick="ToggleMicrophone" class="bg-[#5B595F] ml-[26px] max-[600px]:min-w-[38px] min-w-[74px] max-[600px]:w-[38px] w-[74px] max-[600px]:h-[38px] h-[74px] rounded-full flex items-center justify-center outline-[#FFFFFF29] focus:ring-0 focus:outline-1 order-2">
                 <svg class="w-[17px] h-[26px] max-[600px]:w-[13px] max-[600px]:h-5" viewBox="0 0 17 26" fill="none" xmlns="http://www.w3.org/2000/svg">
                     <path d="M8.5 0C7.39198 0 6.32934 0.417922 5.54585 1.16183C4.76236 1.90573 4.3222 2.91469 4.3222 3.96673V12.9239C4.3222 13.9759 4.76236 14.9849 5.54585 15.7288C6.32934 16.4727 7.39198 16.8906 8.5 16.8906C9.60802 16.8906 10.6707 16.4727 11.4541 15.7288C12.2376 14.9849 12.6778 13.9759 12.6778 12.9239V3.96673C12.6778 3.44581 12.5697 2.92999 12.3598 2.44873C12.1498 1.96746 11.8421 1.53017 11.4541 1.16183C11.0662 0.793483 10.6056 0.501296 10.0988 0.301949C9.5919 0.102602 9.04864 0 8.5 0Z" fill="white" fill-opacity="0.33" />
                     <path d="M0.734688 10.6679C0.530743 10.6857 0.3415 10.7763 0.205173 10.9214C0.0688464 11.0665 -0.00440692 11.2554 0.000205282 11.4498C0.00963902 17.4101 2.5864 20.7767 7.44612 21.1836L7.69139 21.2041V25.2322C7.69139 25.4359 7.77659 25.6311 7.92823 25.7751C8.07987 25.9191 8.28554 26 8.5 26C8.71445 26 8.92013 25.9191 9.07177 25.7751C9.22341 25.6311 9.30861 25.4359 9.30861 25.2322V21.2054L9.55388 21.1849C14.4136 20.7767 16.989 17.4101 16.9998 11.4511C17.0044 11.2567 16.9312 11.0678 16.7948 10.9227C16.6585 10.7776 16.4693 10.687 16.2653 10.6692C16.1594 10.6628 16.0533 10.6769 15.9533 10.7105C15.8533 10.7442 15.7615 10.7967 15.6835 10.865C15.6055 10.9333 15.543 11.016 15.4996 11.1079C15.4562 11.1998 15.4329 11.2991 15.4311 11.3999C15.4318 11.4084 15.4318 11.4169 15.4311 11.4255V11.6814C15.3934 14.1548 14.8166 16.0883 13.7128 17.428C12.5309 18.8637 10.7776 19.5918 8.50135 19.5918C6.22512 19.5918 4.47179 18.8637 3.28988 17.428C2.18614 16.0883 1.60933 14.1548 1.5716 11.6814V11.396C1.56702 11.2014 1.48236 11.0162 1.33576 10.8802C1.18916 10.7441 0.992269 10.6679 0.787248 10.6679H0.734688Z" fill="white" fill-opacity="0.33" />
@@ -125,8 +130,8 @@
         </div>
         <!-- Скрипт для очистки -->
         <script>
-            const input = document.getElementById('searchInput');
-            const clearBtn = document.getElementById('clearButton');
+            let input = document.getElementById('searchInput');
+            let clearBtn = document.getElementById('clearButton');
 
             // Показываем/скрываем крестик в зависимости от наличия текста
             input.addEventListener('input', () => {
@@ -504,3 +509,60 @@
         </p>
     </div>
 </div>
+
+@code {
+    private bool isMicrophoneActive = false;
+    private IDisposable? speechRecognitionSubscription;
+    private string searchResult;
+
+    private async Task ToggleMicrophone()
+    {
+        if (isMicrophoneActive)
+        {
+            await SpeechRecognitionService.CancelSpeechRecognitionAsync(false);
+            speechRecognitionSubscription?.Dispose();
+            speechRecognitionSubscription = null;
+            isMicrophoneActive = false;
+        }
+        else
+        {
+            speechRecognitionSubscription = await SpeechRecognitionService.RecognizeSpeechAsync(
+                "ru-RU",
+
+                onRecognized: async (text) =>
+                {
+                    VoiceSearch.RecognizeSpeech(text);
+                    await InvokeAsync(StateHasChanged);
+                    searchResult = VoiceSearch.HandleSearch();
+                },
+                onError: async (error) =>
+                {
+                    Console.WriteLine($"Speech recognition error: {error}");
+                    await InvokeAsync(StateHasChanged);
+                },
+                onStarted: async () =>
+                {
+                    Console.WriteLine("Speech recognition started");
+                    await InvokeAsync(StateHasChanged);
+                },
+                onEnded: async () =>
+                {
+                    Console.WriteLine("Speech recognition ended");
+                    isMicrophoneActive = false;
+                    await InvokeAsync(StateHasChanged);
+                }
+            );
+            isMicrophoneActive = true;
+        }
+        StateHasChanged();
+    }
+
+    public async ValueTask DisposeAsync()
+    {
+        if (speechRecognitionSubscription is not null)
+        {
+            speechRecognitionSubscription.Dispose();
+            await SpeechRecognitionService.CancelSpeechRecognitionAsync(false);
+        }
+    }
+}
