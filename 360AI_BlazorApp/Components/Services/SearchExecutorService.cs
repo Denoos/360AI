@@ -9,8 +9,6 @@ namespace _360AI_BlazorApp.Components.Services
     {
         public async Task<OurModels[]> HandleSerch(string request, HttpClient cl)
         {
-            //return [new() { Content = "Это типо реквест приходит!", Id = "1", MediaType="text", Relevance = 0.1232411, Source="C:/Test.css" }, new() { Content = "здесь было круто!", Id = "asndoansd", MediaType = "text", Relevance = 0.1232411, Source = "C:/Sochi2004.txt" }, new() { Content = "std::out >> xtep.txt", Id = "iLoveEverybody", MediaType = "image", Relevance = 0.1232411, Source = "C:\\Users\\Denoos\\source\\repos\\360AI\\360AI_BlazorApp\\wwwroot\\images\\image_preza.png" }];
-           
             var searchRequest = new
             {
                 query = request,
